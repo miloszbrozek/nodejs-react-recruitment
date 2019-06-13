@@ -1,0 +1,20 @@
+{
+    "request": {
+        "method": "GET",
+        "url": "/api/trips?user=a"
+    },
+    "response": {
+        "status": 200,
+        "jsonBody" : [{
+                "destination": "Sosnowiec",
+                "startDate": "2018-05-01",
+                "endDate": "2018-06-01",
+                "comment": "Some comment A"
+            }, {
+                "destination": "Katowice",
+                "startDate": "2018-07-15",
+                "endDate": "2018-08-28",
+                "comment": "Other comment A"
+        }]
+    }
+}

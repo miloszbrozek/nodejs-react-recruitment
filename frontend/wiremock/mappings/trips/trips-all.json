@@ -1,0 +1,30 @@
+{
+    "request": {
+        "method": "GET",
+        "url": "/api/trips"
+    },
+    "response": {
+        "status": 200,
+        "jsonBody" : [{
+                "destination": "Sosnowiec",
+                "startDate": "2018-05-01",
+                "endDate": "2018-06-01",
+                "comment": "Some comment A"
+            }, {
+                "destination": "Katowice",
+                "startDate": "2018-07-15",
+                "endDate": "2018-08-28",
+                "comment": "Other comment A"
+            }, {
+                "destination": "Kłodzko",
+                "startDate": "2019-05-01",
+                "endDate": "2019-06-01",
+                "comment": "Some comment B"
+            }, {
+                "destination": "Łódź",
+                "startDate": "2019-07-15",
+                "endDate": "2019-08-28",
+                "comment": "Other comment B"
+        }]
+    }
+}

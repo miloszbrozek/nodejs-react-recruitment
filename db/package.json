@@ -1,0 +1,13 @@
+{
+  "name": "trip-app-db",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {},
+  "scripts": {
+    "start": "docker-compose up",
+    "clean": "npm run remove-db && npm run down",
+    "down": "docker-compose down --rmi all",
+    "remove-db": "sudo rm -rf ./postgres-db/data"
+  },
+  "devDependencies": {}
+}
