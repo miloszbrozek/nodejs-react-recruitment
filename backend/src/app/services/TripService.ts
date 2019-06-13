@@ -18,6 +18,7 @@ export class TripService {
     private doesntExistMessage = `Trip doesn't exist`;
 
     async createTrip(currentUser: GetUserData, trip: TripData) {
+        this.validateStartEndDate(trip);
         return sequelize.transaction(async () => {
             this.checkPrivileges(currentUser, trip.userId);
             return this.tripDao.addTrip(this.updateTripDataToAttributesObject(trip))
@@ -61,6 +62,7 @@ export class TripService {
     }
 
     async updateTrip(currentUser: GetUserData, trip: TripData) {
+        this.validateStartEndDate(trip);
         return sequelize.transaction(async () => {
             const currentTrip = await this.tripDao.findById(trip.id);
             if(currentTrip) {
@@ -115,5 +117,24 @@ export class TripService {
             destination,
             userId
         };
-    } 
+    }
+
+    private parseDate(date: string) {
+        const dateMoment = date ? moment(date, consts.formats.date, true) : null;
+        return dateMoment && dateMoment.isValid() ? dateMoment : null;
+    }
+
+    private validateStartEndDate(trip: TripData) {
+        const startDateMoment = this.parseDate(trip.startDate);
+        const endDateMoment = this.parseDate(trip.endDate);
+        if(!startDateMoment) {
+            throw new AppError('Incorrect start date', {errCode: HttpStatus.BAD_REQUEST});
+        }
+        if(!endDateMoment) {
+            throw new AppError('Incorrect end date', {errCode: HttpStatus.BAD_REQUEST});
+        }
+        if(startDateMoment.isBefore(endDateMoment)) {
+            throw new AppError('Start date should be before end date', {errCode: HttpStatus.BAD_REQUEST});
+        }
+    }
 }
