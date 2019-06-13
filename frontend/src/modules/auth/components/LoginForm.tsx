@@ -1,59 +1,77 @@
 import * as React from 'react';
-import TextField from '@material-ui/core/TextField';
+import { FormikActions, Formik, Form, Field } from 'formik';
+import { object, string } from 'yup';
 import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
 import classnames from 'classnames';
 import { AuthServiceCtx } from '~/common/services/AuthService';
 import { Link } from 'react-router-dom';
+import { ErrorOutlet } from '~/common/components/ErrorOutlet';
+import { FormikTextField } from '~/common/components/FormikTextField';
 
 export type LoginFormProps = {
     className?: string;
     onLoggedIn?: () => void;
 }
 
+type LoginValues = {
+    login: string;
+    password: string;
+}
+
+
+
 export const LoginForm = styled((props: LoginFormProps) => {
     const authService = React.useContext(AuthServiceCtx);
-    const [values, setValues] = React.useState({
-        login: '',
-        password: '',
-      });
-    const handleChange = fieldName => event => {
-        setValues({...values, [fieldName]: event.target.value});
-    }
-    const handleSubmit = () => {
+    const [error, setError] = React.useState(null);
+    const handleSubmit = (values: LoginValues, actions: FormikActions<LoginValues>) => {
         authService.login(values.login, values.password)
             .then(() => {
+                actions.setSubmitting(false);
                 if(props.onLoggedIn) {
                     props.onLoggedIn();
                 }
-            })
+            }).catch(err => {
+                actions.setSubmitting(false);
+                setError(err);
+            });
     }
     
     return (
-        <form className={classnames('p-4 login-form', props.className)} noValidate autoComplete="off">
-            <TextField
-                id="login"
-                label="Login"
-                value={values.login}
-                onChange={handleChange('login')}
-                margin="normal"
-            />
-            <TextField
-                id="password"
-                label="Password"
-                value={values.password}
-                onChange={handleChange('password')}
-                margin="normal"
-                type="password"
-            />
-            <span className='mt-4' >
-                Don't have an account? Click <Link to='/register'>here</Link> to register.
-            </span>
-            
-            <Button variant="contained" className="mt-4" onClick={handleSubmit}>
-                Submit
-            </Button>
-        </form>
+        <Formik<LoginValues> 
+            initialValues={{ login: "", password: "" }}
+            onSubmit={handleSubmit}
+            validationSchema={object().shape({
+                login: string().required('Login is a required field'),
+                password: string().required('Password is a required field')
+            })}
+            render={(formProps) => (
+                <Form className={classnames('p-4 login-form', props.className)}>
+                    <Field
+                        name="login"
+                        label="Login"
+                        margin="normal"
+                        component={FormikTextField}
+                    />
+                    <Field
+                        name="password"
+                        label="Password"
+                        margin="normal"
+                        type="password"
+                        component={FormikTextField}
+                    />
+                    <span className='mt-4' >
+                        Don't have an account? Click <Link to='/register'>here</Link> to register.
+                    </span>
+
+                    <ErrorOutlet error={error} className="mt-1"/>
+                    
+                    <Button disabled={formProps.isSubmitting} type="submit" variant="contained" className="mt-4">
+                        Submit
+                    </Button>
+                </Form>
+            )}
+        />
     );
 })`
     &.login-form {

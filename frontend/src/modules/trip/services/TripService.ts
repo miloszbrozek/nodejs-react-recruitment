@@ -5,8 +5,8 @@ import moment from 'moment';
 import { ServiceUtils, serviceUtils } from '~/common/services/ServiceUtils';
 import { AuthService, authService } from '~/common/services/AuthService';
 import { TripData, TripDataSerialized } from '../models/trip.models';
-import { UserType } from '~/common/models/user.models';
 import queryString from 'query-string';
+import HttpStatus from 'http-status-codes';
 
 export class TripService {
     private tripApi = '/api/trip'
@@ -65,7 +65,10 @@ export class TripService {
             headers: this.authService.getJsonAuthHeaders(),
             body: JSON.stringify(this.convertToTripDataSerialized(tripData))
         })
-            .then(this.serviceUtils.checkError);
+            .then(this.serviceUtils.checkError)
+            .catch(err => this.serviceUtils.handleErrors(err, {
+                [HttpStatus.BAD_REQUEST]: 'Wrong start date/end date values provided'
+            }))
     }
 
     @action
@@ -75,7 +78,10 @@ export class TripService {
             headers: this.authService.getJsonAuthHeaders(),
             body: JSON.stringify(this.convertToTripDataSerialized(tripData))
         })
-            .then(this.serviceUtils.checkError);
+            .then(this.serviceUtils.checkError)
+            .catch(err => this.serviceUtils.handleErrors(err, {
+                [HttpStatus.BAD_REQUEST]: 'Wrong start date/end date values provided'
+            }))
     }
 
     private convertToTripData = (trip: TripDataSerialized): TripData => {

@@ -24,12 +24,12 @@ const _TripCreateEditPage = (props: TripCreateEditPageProps & RouteComponentProp
     const userId = tripService.getUserIdFromQueryString(props.location.search);
 
     const handleEditSubmit = (values: TripFormValues) => {
-        tripService.updateTrip(tripId, { ...values, userId: userId})
+        return tripService.updateTrip(tripId, { ...values, userId: userId})
             .then(() => props.history.push(consts.navigation.UserTrips.navigate(userId)));
     }
 
     const handleCreateSubmit = (values: TripFormValues) => {
-        tripService.createTrip({ ...values, userId: userId})
+        return tripService.createTrip({ ...values, userId: userId})
             .then(() => props.history.push(consts.navigation.UserTrips.navigate(userId)));
     }
 
@@ -54,10 +54,12 @@ const _TripCreateEditPage = (props: TripCreateEditPageProps & RouteComponentProp
     const showCreate = props.mode === 'create';
 
     return (
-        <SinglePageCard className={classnames({'d-none': !showEdit && !showCreate})} title={props.mode === 'create' ? 'Create trip' : 'Edit trip'}>
-            {showEdit && <TripForm currentValues={tripService.editedTrip} onSubmit={handleEditSubmit} onCancel={handleCancel} />}
-            {showCreate && <TripForm onSubmit={handleCreateSubmit} onCancel={handleCancel} />}
-        </SinglePageCard>
+        <>
+            <SinglePageCard className={classnames({'d-none': !showEdit && !showCreate})} title={props.mode === 'create' ? 'Create trip' : 'Edit trip'}>
+                {showEdit && <TripForm currentValues={tripService.editedTrip} onSubmit={handleEditSubmit} onCancel={handleCancel} />}
+                {showCreate && <TripForm onSubmit={handleCreateSubmit} onCancel={handleCancel} />}
+            </SinglePageCard>
+        </>
     );
 }
 

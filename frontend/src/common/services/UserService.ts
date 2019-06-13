@@ -3,6 +3,7 @@ import { observable, action } from "mobx"
 import { GetUserData, CreateUpdateUserData, UserType } from '../models/user.models';
 import { ServiceUtils, serviceUtils } from './ServiceUtils';
 import { AuthService, authService } from './AuthService';
+import HttpStatus from 'http-status-codes';
 
 export class UserService {
     private userApi = '/api/user'
@@ -52,7 +53,10 @@ export class UserService {
             headers: this.authService.getJsonAuthHeaders(),
             body: JSON.stringify(userData)
         })
-            .then(this.serviceUtils.checkError);
+            .then(this.serviceUtils.checkError)
+            .catch((err) => this.serviceUtils.handleErrors(err, {
+                [HttpStatus.CONFLICT]: 'User with this login already exists'
+            }))
     }
 
     @action
@@ -71,7 +75,10 @@ export class UserService {
             headers: this.authService.getJsonAuthHeaders(),
             body: JSON.stringify(userData)
         })
-            .then(this.serviceUtils.checkError);
+            .then(this.serviceUtils.checkError)
+            .catch((err) => this.serviceUtils.handleErrors(err, {
+                [HttpStatus.CONFLICT]: 'User with this login already exists'
+            }))
     }
 
     canEditOwnUserType() {

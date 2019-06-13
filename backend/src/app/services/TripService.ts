@@ -133,8 +133,11 @@ export class TripService {
         if(!endDateMoment) {
             throw new AppError('Incorrect end date', {errCode: HttpStatus.BAD_REQUEST});
         }
-        if(startDateMoment.isBefore(endDateMoment)) {
+        if(!startDateMoment.isBefore(endDateMoment)) {
             throw new AppError('Start date should be before end date', {errCode: HttpStatus.BAD_REQUEST});
+        }
+        if(startDateMoment.isBefore(moment().startOf('day'))) {
+            throw new AppError(`Start date shouldn't be from past`, {errCode: HttpStatus.BAD_REQUEST});
         }
     }
 }

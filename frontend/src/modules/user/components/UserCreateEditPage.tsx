@@ -22,12 +22,12 @@ const _UserCreateEditPage = (props: UserCreateEditPageProps & RouteComponentProp
     const userId = parseInt(props.match.params.id);
 
     const handleEditSubmit = (values: UserFormValues) => {
-        userService.updateUser(userId, values)
+        return userService.updateUser(userId, values)
             .then(() => props.history.push(consts.navigation.Users));
     }
 
     const handleCreateSubmit = (values: UserFormValues) => {
-        userService.createUser(values)
+        return userService.createUser(values)
             .then(() => props.history.push(consts.navigation.Users));
     }
 

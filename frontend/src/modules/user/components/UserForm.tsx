@@ -1,19 +1,21 @@
 import * as React from 'react';
 import classnames from 'classnames';
-import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { UserType, GetUserData } from '~/common/models/user.models';
 import styled from 'styled-components';
 import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import { object, string } from 'yup';
+import { FormikActions, Formik, Form, Field } from 'formik';
+import { ErrorOutlet } from '~/common/components/ErrorOutlet';
+import { FormikTextField } from '~/common/components/FormikTextField';
+import { FormikSelectField } from '~/common/components/FormikSelectField';
 
 export type UserFormProps = {
     allowToChangeType: boolean;
     className?: string;
     currentValues?: GetUserData;
-    onSubmit?: (values: UserFormValues) => void;
+    onSubmit?: (values: UserFormValues) => Promise<any>;
     onCancel?: () => void;
 }
 
@@ -29,19 +31,9 @@ const getCurrentValue = (props: UserFormProps, fieldName: string, defaultValue: 
     return (props.currentValues ? props.currentValues[fieldName] : null) || defaultValue;
 }
 const _UserForm = (props: UserFormProps) => {
-    const [values, setValues] = React.useState({
-        login: getCurrentValue(props, 'login', ''),
-        firstName: getCurrentValue(props, 'firstName', ''),
-        lastName: getCurrentValue(props, 'lastName', ''),
-        type: getCurrentValue(props, 'type', UserType.Regular),
-        password: ''
-    });
-
+    const [error, setError] = React.useState(null);
     
-    const handleChange = fieldName => event => {
-        setValues({...values, [fieldName]: event.target.value});
-    }
-    const handleSubmit = () => {
+    const handleSubmit = (values: UserFormValues, actions: FormikActions<UserFormValues>) => {
         const result = {
             firstName: values.firstName,
             lastName: values.lastName,
@@ -50,7 +42,14 @@ const _UserForm = (props: UserFormProps) => {
             type: props.allowToChangeType ? values.type : UserType.Regular
         };
         if(props.onSubmit) {
-            props.onSubmit(result);
+            props.onSubmit(result)
+                .then(() => actions.setSubmitting(false))
+                .catch(err => {
+                    actions.setSubmitting(false);
+                    setError(err);
+                })
+        } else {
+            actions.setSubmitting(false);
         }
     }
     const handleCancel = () => {
@@ -60,63 +59,75 @@ const _UserForm = (props: UserFormProps) => {
     }
 
     return (
-        <form className={classnames('p-4 new-user-form', props.className)} noValidate autoComplete="off">
-            <TextField
-                id="login"
-                label="Login"
-                value={values.login}
-                onChange={handleChange('login')}
-                margin="normal"
-            />
-            <TextField
-                id="firstName"
-                label="First name"
-                value={values.firstName}
-                onChange={handleChange('firstName')}
-                margin="normal"
-            />
-            <TextField
-                id="lastName"
-                label="Last name"
-                value={values.lastName}
-                onChange={handleChange('lastName')}
-                margin="normal"
-            />
-            {props.allowToChangeType && 
-                <FormControl margin="normal">
-                    <InputLabel htmlFor="type-input">Type</InputLabel>
-                    <Select
-                        value={values.type}
-                        onChange={handleChange('type')}
-                        inputProps={{
-                            name: 'type-input',
-                            id: 'type-input',
-                        }}
-                    >
-                    <MenuItem value={UserType.Regular}>Regular</MenuItem>
-                    <MenuItem value={UserType.Manager}>Manager</MenuItem>
-                    <MenuItem value={UserType.Admin}>Admin</MenuItem>
-                    </Select>
-                </FormControl>
-            }
-            <TextField
-                id="password"
-                label="Password"
-                value={values.password}
-                onChange={handleChange('password')}
-                margin="normal"
-                type="password"
-            />
-            <div className="two-buttons">
-                <Button variant="contained" className="mt-4" onClick={handleCancel}>
-                    Cancel
-                </Button>
-                <Button variant="contained" className="mt-4" onClick={handleSubmit}>
-                    Submit
-                </Button>
-            </div>
-                
-        </form>
+        <Formik<UserFormValues>
+            initialValues={{ 
+                login: getCurrentValue(props, 'login', ''),
+                firstName: getCurrentValue(props, 'firstName', ''),
+                lastName: getCurrentValue(props, 'lastName', ''),
+                type: getCurrentValue(props, 'type', UserType.Regular),
+                password: ''
+            }}
+            onSubmit={handleSubmit}
+            validationSchema={object().shape({
+                login: string().required('Login is a required field'),
+                firstName: string().required('First name is a required field'),
+                lastName: string().required('Last name is a required field'),
+                password: string().required('Password is a required field')
+            })}
+            render={(formProps) => (
+                <Form className={classnames('p-4 new-user-form', props.className)}>
+                    <Field
+                        name="login"
+                        label="Login"
+                        margin="normal"
+                        component={FormikTextField}
+                    />
+                    <Field
+                        name="firstName"
+                        label="First name"
+                        margin="normal"
+                        component={FormikTextField}
+                    />
+                    <Field
+                        name="lastName"
+                        label="Last name"
+                        margin="normal"
+                        component={FormikTextField}
+                    />
+                    {props.allowToChangeType && 
+                        <FormControl margin="normal">
+                            <Field 
+                                label="Type"
+                                name="type"
+                                component={FormikSelectField}
+                            >
+                                <MenuItem value={UserType.Regular}>Regular</MenuItem>
+                                <MenuItem value={UserType.Manager}>Manager</MenuItem>
+                                <MenuItem value={UserType.Admin}>Admin</MenuItem>
+                            </Field>
+                        </FormControl>
+                    }
+                    <Field
+                        name="password"
+                        label="Password"
+                        margin="normal"
+                        type="password"
+                        component={FormikTextField}
+                    />
+
+                    <ErrorOutlet error={error} className="mt-1"/>
+
+                    <div className="two-buttons">
+                        <Button variant="contained" className="mt-4" onClick={handleCancel}>
+                            Cancel
+                        </Button>
+                        <Button disabled={formProps.isSubmitting} type="submit" variant="contained" className="mt-4">
+                            Submit
+                        </Button>
+                    </div>
+                        
+                </Form>)}
+        />
     );
 }
 

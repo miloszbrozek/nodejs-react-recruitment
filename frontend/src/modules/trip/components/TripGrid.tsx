@@ -44,8 +44,9 @@ const _TripGrid = (props: TripGridProps) => {
     }
 
     const getDaysToDate = (date: Date) => {
-        const result = moment(date).diff(moment(), 'days');
-        return result <= 0 ? '' : result + '';
+        const today = moment().startOf('day');
+        const result = moment(date).diff(today, 'days');
+        return result < 0 ? '' : result;
     }
 
     const isNextMonthDate = (date: Date) => {

@@ -2,9 +2,9 @@ import * as React from 'react';
 import { observable, action } from "mobx"
 import { ServiceUtils, serviceUtils } from './ServiceUtils';
 import { AuthData } from '../models/auth.models';
-import register from '~/registerServiceWorker';
 import { CreateUpdateUserData } from '../models/user.models';
 import {Promise} from 'es6-promise';
+import HttpStatus from 'http-status-codes';
 
 export class AuthService {
     private authApi = '/api/auth';
@@ -25,12 +25,20 @@ export class AuthService {
             body: JSON.stringify({login, password})
         })
             .then(this.serviceUtils.checkError)
+            .then(this.checkResponse)
             .then(response => <AuthData>response.json())
             .then(data => {
                 this.authenticatedUser = data;
                 this.saveInStorage();
-            });
-            // .catch(this.serviceUtils.handleError);
+            })
+            .catch(err => this.serviceUtils.handleErrors(err, {
+                [HttpStatus.UNAUTHORIZED]: 'Unknown user and/or password',
+                genericMessage: 'Failed to login'
+            }));
+    }
+
+    private checkResponse = (response) => {
+        return response;
     }
 
     @action
@@ -49,7 +57,9 @@ export class AuthService {
         })
             .then(this.serviceUtils.checkError)
             .then(response => response.json())
-            // .catch(this.serviceUtils.handleError)
+            .catch((err) => this.serviceUtils.handleErrors(err, {
+                [HttpStatus.CONFLICT]: 'User with this login already exists'
+            }))
     }
 
     getJsonAuthHeaders() {

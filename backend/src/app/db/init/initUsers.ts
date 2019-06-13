@@ -15,6 +15,11 @@ const initRegularUser = () => {
         password: '$2b$10$uybY9YVFgLU5hBwE5zfJwuHrYSEFo9nGQN3jWsNiCGv9F/u9HlslG',
         type: 'regular',
         trips: [{
+            startDate: getDate('2019-02-05'),
+            endDate: getDate('2019-03-01'),
+            comment: 'Pointless trip',
+            destination: 'Kostrzyn nad Odrą'
+        }, {
             startDate: getDate('2019-06-19'),
             endDate: getDate('2019-06-25'),
             comment: 'Some regular trip',

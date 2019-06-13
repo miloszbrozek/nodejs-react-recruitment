@@ -15,6 +15,6 @@ export const consts = {
         date: 'YYYY-MM-DD',
         dateTime: 'YYYY-MM-DD HH:mm:ss'
     },
-    jwtTokenKey: 'gfgfdgsfd',
-    jwtTokenExpiration: null
+    jwtTokenKey: process.env.JWT_TOKEN || 'gfgfdgsfd',
+    jwtTokenExpiration: process.env.JWT_TOKEN_EXPIRATION || null
 }

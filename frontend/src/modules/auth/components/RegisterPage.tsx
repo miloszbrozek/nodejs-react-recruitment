@@ -12,8 +12,8 @@ export type RegisterPageProps = {
 const _RegisterPage = (props: RegisterPageProps & RouteComponentProps<any>) => {
     const authService = React.useContext(AuthServiceCtx);
     const handleSubmit = (values: UserFormValues) => {
-        authService.register(values)
-            .then(() => props.history.push(consts.navigation.Login));
+        return authService.register(values)
+            .then(() => props.history.push(consts.navigation.Login))
     }
     const handleCancel = () => {
         props.history.push(consts.navigation.Login);
