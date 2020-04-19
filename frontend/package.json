@@ -35,6 +35,7 @@
   },
   "scripts": {
     "start": "parcel src/index.html",
+    "build": "parcel build src/index.html",
     "start:proxy": "node proxy/proxy.js",
     "ts-watch": "tsc -w",
     "wiremock": "wiremock --root-dir ./wiremock"
