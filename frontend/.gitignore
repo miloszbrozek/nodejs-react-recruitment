@@ -25,4 +25,4 @@ yarn-error.log*
 dist
 
 #vscode
-.vscode
+.vscode/*
