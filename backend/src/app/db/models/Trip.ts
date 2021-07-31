@@ -1,5 +1,5 @@
 import {Model, DataTypes, Sequelize, BuildOptions, HasManyGetAssociationsMixin, HasManyAddAssociationMixin, HasManyRemoveAssociationMixin} from 'sequelize';
-import { sequelize, dbConf } from "../sequelize";
+import { sequelize } from "../sequelize";
 import { User } from './User';
 
 
@@ -42,8 +42,6 @@ export const Trip = <TripModelStatic>sequelize.define('trip', {
             key: 'id'
         }
     }
-},{
-    schema: dbConf.schemaName
 });
 
 export const initTripRelations = () => {

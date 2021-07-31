@@ -1,5 +1,5 @@
 import {Model, Sequelize, DataTypes, HasManyGetAssociationsMixin, HasManyAddAssociationMixin, HasManyRemoveAssociationMixin, BuildOptions} from 'sequelize';
-import { sequelize, dbConf } from "../sequelize";
+import { sequelize } from "../sequelize";
 import {  TripAttributes, TripModel, Trip } from './Trip';
 
 export interface UserAttributes {
@@ -43,8 +43,6 @@ export const User = <UserModelStatic>sequelize.define('user', {
     password: {
         type: DataTypes.STRING
     }
-},{
-    schema: dbConf.schemaName
 });
 
 

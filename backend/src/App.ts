@@ -15,7 +15,8 @@ export class App {
         const app = express();
         this.configure(app);
         app.listen(consts.port, () => {
-            console.log(`Server started on port: ${consts.port}`)
+            console.log(`Server started on port: ${consts.port}`);
+            console.log(`ENV = ${consts.env}`);
         });
     }
 

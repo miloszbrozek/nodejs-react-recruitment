@@ -1,0 +1,10 @@
+{
+  "name": "toptal-travel-app-recrutiment",
+  "version": "1.0.0",
+  "scripts": {
+    "clean": "rm -rf dist && mkdir dist",
+    "build-frontend": "cd frontend && npm run build && cp -r dist ../dist/frontend",
+    "build-backend": "cd backend && npm run build && cp -r dist ../dist/backend && cp -r node_modules ../dist/backend/node_modules",
+    "build": "npm run clean && npm run build-frontend && npm run build-backend"
+  }
+}

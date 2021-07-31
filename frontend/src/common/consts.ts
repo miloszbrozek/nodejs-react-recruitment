@@ -1,26 +1,27 @@
+const rootPath = '/app';
+
 export const consts = {
     dateFormat: 'YYYY-MM-DD',
-    apiPath: 'http://localhost:8080/api/',
     navigation: {
-        Login: '/login',
-        Users: '/users',
-        Register: '/register',
+        Login: `${rootPath}/login`,
+        Users: `${rootPath}/users`,
+        Register: `${rootPath}/register`,
         EditUser: {
-            navigate: (userId: number) => `/user/edit/${userId}`,
-            route: `/user/edit/:id`
+            navigate: (userId: number) => `${rootPath}/user/edit/${userId}`,
+            route: `${rootPath}/user/edit/:id`
         },
-        CreateUser: '/user/create',
+        CreateUser: `${rootPath}/user/create`,
         UserTrips: {
-            navigate: (userId: number) => `/trips?userId=${userId}`,
-            route: `/trips`
+            navigate: (userId: number) => `${rootPath}/trips?userId=${userId}`,
+            route: `${rootPath}/trips`
         },
         EditUserTrip: {
-            navigate: (tripId: number, userId: number) => `/trip/edit/${tripId}?userId=${userId}`,
-            route: '/trip/edit/:id'
+            navigate: (tripId: number, userId: number) => `${rootPath}/trip/edit/${tripId}?userId=${userId}`,
+            route: `${rootPath}/trip/edit/:id`
         },
         CreateUserTrip: {
-            navigate: (userId: number) => `/trip/create?userId=${userId}`,
-            route: '/trip/create'
+            navigate: (userId: number) => `${rootPath}/trip/create?userId=${userId}`,
+            route: `${rootPath}/trip/create`
         }
     }
 }

@@ -9,7 +9,7 @@ services:
       dockerfile: ./Dockerfile
     image: ad_postgres:latest
     volumes:
-      - "./postgres-db/data:/var/lib/postgresql/data"
+      - "/var/lib/postgresql/data"
     ports:
       - "5432:5432"
     environment:

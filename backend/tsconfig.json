@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "dist/node_modules",
+    "outDir": "dist",
     "module": "commonjs",
     "target": "es2017",
     "lib": ["es2017"],
@@ -17,7 +17,7 @@
     "noUnusedLocals": false,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "paths": {
       "*": [
           "node_modules/*",
@@ -32,6 +32,6 @@
     "scripts"
   ],
   "include": [
-    "src", "src/node_modules"
+    "src"
   ]
 }

@@ -23,7 +23,7 @@
     "winston": "^3.2.1"
   },
   "scripts": {
-    "start": "NODE_ENV=dev node  --inspect ./dist/node_modules/index",
+    "start": "NODE_ENV=dev DATABASE_URL='postgres://postgres:postgres@localhost:5432/tripapp' NODE_PATH=./dist node  --inspect ./dist/index",
     "build": "rm -rf ./dist && tsc",
     "build-watch": "npm run build && tsc -w"
   },
