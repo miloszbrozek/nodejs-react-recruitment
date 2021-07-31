@@ -8,6 +8,7 @@ import { AuthServiceCtx } from '~/common/services/AuthService';
 import { Link } from 'react-router-dom';
 import { ErrorOutlet } from '~/common/components/ErrorOutlet';
 import { FormikTextField } from '~/common/components/FormikTextField';
+import { consts } from '~/common/consts';
 
 export type LoginFormProps = {
     className?: string;
@@ -61,7 +62,7 @@ export const LoginForm = styled((props: LoginFormProps) => {
                         component={FormikTextField}
                     />
                     <span className='mt-4' >
-                        Don't have an account? Click <Link to='/register'>here</Link> to register.
+                        Don't have an account? Click <Link to={consts.navigation.Register}>here</Link> to register.
                     </span>
 
                     <ErrorOutlet error={error} className="mt-1"/>
