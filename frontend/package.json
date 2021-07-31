@@ -24,7 +24,7 @@
     "react": "^16.8.3",
     "react-dom": "^16.8.6",
     "react-i18next": "^8.3.8",
-    "react-native": "^0.59.9",
+    "react-native": "^0.62.3",
     "react-router": "4.3.1",
     "react-router-dom": "4.3.1",
     "react-to-print": "^2.1.2",
